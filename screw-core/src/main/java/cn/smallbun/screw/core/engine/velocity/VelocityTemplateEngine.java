@@ -30,10 +30,7 @@ import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.log.NullLogChute;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.*;
 
 import static cn.smallbun.screw.core.constant.DefaultConstants.DEFAULT_ENCODING;
 import static cn.smallbun.screw.core.engine.EngineTemplateType.velocity;
@@ -89,7 +86,7 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
      * @throws ProduceException ProduceException
      */
     @Override
-    public void produce(DataModel info, String docName) throws ProduceException {
+    public File produce(DataModel info, String docName) throws ProduceException {
         Assert.notNull(info, "DataModel can not be empty!");
         Template template;
         try {
@@ -108,7 +105,8 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
                         DEFAULT_ENCODING);
             }
             // output
-            try (FileOutputStream outStream = new FileOutputStream(getFile(docName));
+            File file = getFile(docName);
+            try (FileOutputStream outStream = new FileOutputStream(file);
                     OutputStreamWriter writer = new OutputStreamWriter(outStream, DEFAULT_ENCODING);
                     BufferedWriter sw = new BufferedWriter(writer)) {
                 //put data
@@ -119,6 +117,7 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
                 // open the output directory
                 openOutputDir();
             }
+            return file;
         } catch (IOException e) {
             throw ExceptionUtils.mpe(e);
         }

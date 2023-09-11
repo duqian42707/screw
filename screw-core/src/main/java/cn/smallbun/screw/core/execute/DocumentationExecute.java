@@ -26,6 +26,8 @@ import cn.smallbun.screw.core.process.DataModelProcess;
 import cn.smallbun.screw.core.query.DatabaseQuery;
 import cn.smallbun.screw.core.util.ExceptionUtils;
 
+import java.io.File;
+
 /**
  * 文档生成
  *
@@ -43,32 +45,34 @@ public class DocumentationExecute extends AbstractExecute {
      * @throws BuilderException BuilderException
      */
     @Override
-    public void execute(DatabaseQuery query) throws BuilderException {
+    public File execute(DatabaseQuery query) throws BuilderException {
         try {
             long start = System.currentTimeMillis();
             //处理数据
             DataModel dataModel = new DataModelProcess(config).process(query);
             //产生文档
             TemplateEngine produce = new EngineFactory(config.getEngineConfig()).newInstance();
-            produce.produce(dataModel, getDocName(dataModel.getDatabase()));
+            File file = produce.produce(dataModel, getDocName(dataModel.getDatabase()));
             logger.debug("database document generation complete time consuming:{}ms",
                 System.currentTimeMillis() - start);
+            return file;
         } catch (Exception e) {
             throw ExceptionUtils.mpe(e);
         }
     }
 
     @Override
-    public void execute() throws BuilderException {
+    public File execute() throws BuilderException {
         try {
             long start = System.currentTimeMillis();
             //处理数据
             DataModel dataModel = new DataModelProcess(config).process();
             //产生文档
             TemplateEngine produce = new EngineFactory(config.getEngineConfig()).newInstance();
-            produce.produce(dataModel, getDocName(dataModel.getDatabase()));
+            File file = produce.produce(dataModel, getDocName(dataModel.getDatabase()));
             logger.debug("database document generation complete time consuming:{}ms",
                 System.currentTimeMillis() - start);
+            return file;
         } catch (Exception e) {
             throw ExceptionUtils.mpe(e);
         }

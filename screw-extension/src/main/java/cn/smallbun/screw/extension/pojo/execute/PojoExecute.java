@@ -57,7 +57,7 @@ public class PojoExecute implements Execute {
     }
 
     @Override
-    public void execute() {
+    public File execute() {
         try {
             long start = System.currentTimeMillis();
             //获取数据
@@ -85,14 +85,15 @@ public class PojoExecute implements Execute {
             }
             logger.debug("pojo generation complete time consuming:{}ms",
                 System.currentTimeMillis() - start);
+            return pathFile;
         } catch (Exception e) {
             throw ExceptionUtils.mpe(e);
         }
     }
 
     @Override
-    public void execute(DatabaseQuery query) {
-
+    public File execute(DatabaseQuery query) {
+        return null;
     }
 
     private String validate(PojoConfiguration config) {

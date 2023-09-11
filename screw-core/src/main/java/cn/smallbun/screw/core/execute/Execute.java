@@ -19,6 +19,8 @@ package cn.smallbun.screw.core.execute;
 
 import cn.smallbun.screw.core.query.DatabaseQuery;
 
+import java.io.File;
+
 /**
  * 执行文档生成
  *
@@ -28,11 +30,11 @@ public interface Execute {
     /**
      * 执行生成
      */
-    void execute();
+    File execute();
 
     /**
      * 执行生成
      * @param query 自定义查询器
      */
-    void execute(DatabaseQuery query);
+    File execute(DatabaseQuery query);
 }
