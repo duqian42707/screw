@@ -1,9 +1,9 @@
-package com.dqv5.dbdoc.web;
+package com.dqv5.screw.server.web;
 
-import com.dqv5.dbdoc.pojo.DbdocConfigDTO;
-import com.dqv5.dbdoc.pojo.GenerateResult;
-import com.dqv5.dbdoc.service.MainService;
-import com.dqv5.dbdoc.util.JsonUtil;
+import com.dqv5.screw.server.pojo.DbdocConfigDTO;
+import com.dqv5.screw.server.pojo.GenerateResult;
+import com.dqv5.screw.server.service.MainService;
+import com.dqv5.screw.server.util.JsonUtil;
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;

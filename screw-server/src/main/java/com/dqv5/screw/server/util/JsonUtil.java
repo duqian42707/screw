@@ -1,4 +1,4 @@
-package com.dqv5.dbdoc.util;
+package com.dqv5.screw.server.util;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -1,4 +1,4 @@
-package com.dqv5.dbdoc.pojo;
+package com.dqv5.screw.server.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

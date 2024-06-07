@@ -1,7 +1,7 @@
-package com.dqv5.dbdoc.service;
+package com.dqv5.screw.server.service;
 
-import com.dqv5.dbdoc.pojo.DbdocConfigDTO;
-import com.dqv5.dbdoc.pojo.GenerateResult;
+import com.dqv5.screw.server.pojo.DbdocConfigDTO;
+import com.dqv5.screw.server.pojo.GenerateResult;
 import org.springframework.web.multipart.MultipartFile;
 
 /**

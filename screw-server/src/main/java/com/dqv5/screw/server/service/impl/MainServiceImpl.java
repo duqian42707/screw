@@ -1,4 +1,4 @@
-package com.dqv5.dbdoc.service.impl;
+package com.dqv5.screw.server.service.impl;
 
 import cn.smallbun.screw.core.Configuration;
 import cn.smallbun.screw.core.engine.EngineConfig;
@@ -6,9 +6,9 @@ import cn.smallbun.screw.core.engine.EngineFileType;
 import cn.smallbun.screw.core.engine.EngineTemplateType;
 import cn.smallbun.screw.core.execute.DocumentationExecute;
 import cn.smallbun.screw.core.process.ProcessConfig;
-import com.dqv5.dbdoc.pojo.DbdocConfigDTO;
-import com.dqv5.dbdoc.pojo.GenerateResult;
-import com.dqv5.dbdoc.service.MainService;
+import com.dqv5.screw.server.pojo.DbdocConfigDTO;
+import com.dqv5.screw.server.pojo.GenerateResult;
+import com.dqv5.screw.server.service.MainService;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
