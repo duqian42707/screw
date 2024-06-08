@@ -77,11 +77,15 @@ public abstract class AbstractTemplateEngine implements TemplateEngine {
             boolean mkdir = file.mkdirs();
         }
         //文件后缀
-        String suffix = getEngineConfig().getFileType().getFileSuffix();
+        String suffix = getFileSuffix();
         file = new File(file, docName + suffix);
         //设置文件产生位置
         getEngineConfig().setFileOutputDir(file.getParent());
         return file;
+    }
+
+    protected String getFileSuffix() {
+        return getEngineConfig().getFileType().getFileSuffix();
     }
 
     /**

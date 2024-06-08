@@ -8,9 +8,12 @@ import cn.smallbun.screw.core.util.Assert;
 import cn.smallbun.screw.core.util.ExceptionUtils;
 import cn.smallbun.screw.core.util.StringUtils;
 import com.deepoove.poi.XWPFTemplate;
+import com.deepoove.poi.config.Configure;
+import com.deepoove.poi.plugin.table.LoopRowTableRenderPolicy;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import static cn.smallbun.screw.core.engine.EngineTemplateType.poitl;
 import static cn.smallbun.screw.core.util.FileUtils.isFileExists;
@@ -30,17 +33,19 @@ public class PoitlTemplateEngine extends AbstractTemplateEngine {
         Assert.notNull(info, "DataModel can not be empty!");
         String path = getEngineConfig().getCustomTemplate();
         try {
-            XWPFTemplate template;
+            InputStream inputStream;
             // 如果自定义路径不为空文件也存在
             if (StringUtils.isNotBlank(path) && isFileExists(path)) {
-                template = XWPFTemplate.compile(path);
+                inputStream = Files.newInputStream(Paths.get(path));
             }
             //获取系统默认的模板
             else {
                 String defaultPath = poitl.getTemplateDir() + getEngineConfig().getFileType().getTemplateNamePrefix() + poitl.getSuffix();
-                InputStream inputStream = this.getClass().getResourceAsStream(defaultPath);
-                template = XWPFTemplate.compile(inputStream);
+                inputStream = this.getClass().getResourceAsStream(defaultPath);
             }
+            LoopRowTableRenderPolicy policy = new LoopRowTableRenderPolicy();
+            Configure config = Configure.builder().bind("columns", policy).build();
+            XWPFTemplate template = XWPFTemplate.compile(inputStream, config);
             // create file
             File file = getFile(docName);
             // writer
@@ -56,4 +61,9 @@ public class PoitlTemplateEngine extends AbstractTemplateEngine {
             throw ExceptionUtils.mpe(e);
         }
     }
+
+    protected String getFileSuffix() {
+        return ".docx";
+    }
+
 }
