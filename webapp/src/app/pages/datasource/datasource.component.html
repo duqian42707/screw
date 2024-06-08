@@ -1,0 +1,105 @@
+<div class="default-router">
+  <!--  功能按钮区 -->
+  <div class="function-zone">
+    <button nz-button nzType="primary" (click)=openEditModal()>
+      <i nz-icon nzType="plus"></i>新增
+    </button>
+  </div>
+  <!-- 表格数据区 -->
+  <nz-table #basicTable nzShowSizeChanger nzShowQuickJumper [nzScroll]="{x:'1170px'}" [nzData]="dataSet"
+            [nzFrontPagination]="true" [nzTotal]="total" [nzShowTotal]="totalTpl"
+            [nzLoading]="loading">
+    <thead>
+    <tr>
+      <th nzWidth="200px" nzLeft="0px">名称</th>
+      <th nzWidth="120px">jdbcUrl</th>
+      <th nzWidth="120px">用户名</th>
+      <th nzWidth="150px">密码</th>
+      <th nzWidth="180px">schema</th>
+      <th nzWidth="180px">备注</th>
+      <th nzWidth="180px">创建时间</th>
+      <th nzWidth="180px">更新时间</th>
+      <th nzWidth="150px" nzRight="0px">操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of basicTable.data">
+      <td nzLeft="0px">{{ data.name }}</td>
+      <td>{{ data.dbUrl }}</td>
+      <td>{{ data.dbUsername }}</td>
+      <td>{{ data.dbPassword }}</td>
+      <td>{{ data.dbSchema }}</td>
+      <td>{{ data.remark }}</td>
+      <td>{{ data.createdDate|date:'yyyy-MM-dd HH:mm' }}</td>
+      <td>{{ data.lastModifiedDate|date:'yyyy-MM-dd HH:mm' }}</td>
+      <td nzRight="0px">
+        <a (click)="openEditModal(data)">修改</a>
+        <nz-divider nzType="vertical"></nz-divider>
+        <a nz-popconfirm nzPopconfirmTitle="确定要删除吗？" (nzOnConfirm)="deleteData(data)">
+          <span style="color:red">删除</span>
+        </a>
+      </td>
+    </tr>
+    </tbody>
+    <ng-template #totalTpl> 共{{ total }}条数据</ng-template>
+  </nz-table>
+</div>
+
+
+<!-- 编辑弹框 -->
+<nz-modal [(nzVisible)]="editModal.isVisible" [nzWidth]="800" [nzMaskClosable]="false"
+          [nzTitle]="editModal.title"
+          [nzOkLoading]="editModal.saveLoading"
+          (nzOnOk)="submitData()" (nzOnCancel)="editModal.isVisible=false"
+>
+  <ng-container *nzModalContent>
+    <form [formGroup]="validateForm">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzRequired>名称</nz-form-label>
+        <nz-form-control [nzSpan]="14" [nzErrorTip]="nameTip">
+          <input nz-input formControlName="name"/>
+          <!--  表单错误信息，可能有多种错误  -->
+          <ng-template #nameTip let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              名称不能为空！
+            </ng-container>
+            <ng-container *ngIf="control.hasError('maxlength')">
+              名称最长100个字符！
+            </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzRequired>jdbcUrl</nz-form-label>
+        <nz-form-control [nzSpan]="14" [nzErrorTip]="'jdbcUrl不能为空'">
+          <input nz-input formControlName="dbUrl"/>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzRequired>用户名</nz-form-label>
+        <nz-form-control [nzSpan]="14" [nzErrorTip]="'用户名不能为空'">
+          <input nz-input formControlName="dbUsername"/>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzRequired>密码</nz-form-label>
+        <nz-form-control [nzSpan]="14" [nzErrorTip]="'密码不能为空'">
+          <input nz-input formControlName="dbPassword"/>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">schema</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+          <input nz-input formControlName="dbSchema"/>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">备注</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+          <textarea nz-input formControlName="remark"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>
+

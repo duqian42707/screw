@@ -6,9 +6,11 @@ import cn.smallbun.screw.core.engine.EngineFileType;
 import cn.smallbun.screw.core.engine.EngineTemplateType;
 import cn.smallbun.screw.core.execute.DocumentationExecute;
 import cn.smallbun.screw.core.process.ProcessConfig;
+import com.dqv5.screw.server.entity.DataSourceInfo;
 import com.dqv5.screw.server.pojo.DbdocConfigDTO;
 import com.dqv5.screw.server.pojo.GenerateResult;
-import com.dqv5.screw.server.service.MainService;
+import com.dqv5.screw.server.repository.DataSourceInfoRepository;
+import com.dqv5.screw.server.service.DocumentService;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +33,11 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class MainServiceImpl implements MainService {
+public class DocumentServiceImpl implements DocumentService {
+    @Resource
+    private DataSourceInfoRepository dataSourceInfoRepository;
+
+
     public static final String FILE_SEPARATOR = File.separator;
     public static final String AUTO_DIR = System.getProperty("java.io.tmpdir") + FILE_SEPARATOR + "dbdoc";
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_SSS");
@@ -57,11 +64,22 @@ public class MainServiceImpl implements MainService {
         }
 
         HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setJdbcUrl(config.getDbUrl());
-        hikariConfig.setUsername(config.getDbUsername());
-        hikariConfig.setPassword(config.getDbPassword());
-        if (StringUtils.isNotBlank(config.getDbSchema())) {
-            hikariConfig.setSchema(config.getDbSchema());
+        String datasourceId = config.getDatasourceId();
+        if (StringUtils.isNotBlank(datasourceId)) {
+            DataSourceInfo dataSourceInfo = dataSourceInfoRepository.findById(datasourceId).orElseThrow(() -> new RuntimeException("参数错误：datasourceId=" + datasourceId));
+            hikariConfig.setJdbcUrl(dataSourceInfo.getDbUrl());
+            hikariConfig.setUsername(dataSourceInfo.getDbUsername());
+            hikariConfig.setPassword(dataSourceInfo.getDbPassword());
+            if (StringUtils.isNotBlank(dataSourceInfo.getDbSchema())) {
+                hikariConfig.setSchema(dataSourceInfo.getDbSchema());
+            }
+        } else {
+            hikariConfig.setJdbcUrl(config.getDbUrl());
+            hikariConfig.setUsername(config.getDbUsername());
+            hikariConfig.setPassword(config.getDbPassword());
+            if (StringUtils.isNotBlank(config.getDbSchema())) {
+                hikariConfig.setSchema(config.getDbSchema());
+            }
         }
 
         DataSource dataSource = new HikariDataSource(hikariConfig);

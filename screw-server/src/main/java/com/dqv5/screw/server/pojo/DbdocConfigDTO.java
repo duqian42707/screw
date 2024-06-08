@@ -11,6 +11,7 @@ import java.util.List;
 @Data
 public class DbdocConfigDTO {
 
+    private String datasourceId;
     private String dbUrl;
     private String dbUsername;
     private String dbPassword;

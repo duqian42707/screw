@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HttpClient, HttpEvent, HttpRequest, HttpResponse} from "@angular/common/http";
 import {downloadFromResponse} from "../../utils/http-download";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
@@ -10,7 +10,8 @@ import {filter} from "rxjs";
   templateUrl: './generate.component.html',
   styleUrls: ['./generate.component.less']
 })
-export class GenerateComponent {
+export class GenerateComponent implements OnInit {
+  datasourceList: any[] = [];
   fileList: NzUploadFile[] = [];
 
   loading = false;
@@ -18,14 +19,15 @@ export class GenerateComponent {
 
   constructor(private http: HttpClient, private fb: FormBuilder) {
     this.validateForm = this.fb.group({
-      dbUrl: [null, [Validators.required]],
-      dbUsername: [null, [Validators.required]],
-      dbPassword: [null, [Validators.required]],
-      dbSchema: [null],
+      datasourceId: [null, [Validators.required]],
       fileType: ['HTML',],
       version: ['1.0.0',],
       description: ['数据库表结构文档',]
     })
+  }
+
+  ngOnInit(): void {
+    this.queryDatasourceList();
   }
 
 
@@ -33,6 +35,12 @@ export class GenerateComponent {
     this.fileList = [file];
     return false;
   };
+
+  queryDatasourceList() {
+    this.http.get('api/datasource/queryList').subscribe((res: any) => {
+      this.datasourceList = res.data;
+    })
+  }
 
   submit() {
     const config = this.validateForm.getRawValue();
@@ -43,7 +51,7 @@ export class GenerateComponent {
     }
     this.loading = true;
 
-    const req = new HttpRequest('POST', '/api/generate', data, {
+    const req = new HttpRequest('POST', '/api/document/generate', data, {
       reportProgress: true,
       responseType: 'blob',
     });

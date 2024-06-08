@@ -8,14 +8,17 @@
         <div class="sidebar-logo">
             <a href="https://ng.ant.design/" target="_blank">
                 <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo">
-                <h1>dbdoc</h1>
+                <h1>Screw</h1>
             </a>
         </div>
         <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
             <li nz-submenu nzOpen nzTitle="主菜单" nzIcon="dashboard">
                 <ul>
                     <li nz-menu-item nzMatchRouter>
-                        <a routerLink="/generate">生成文档</a>
+                        <a routerLink="/datasource">数据源管理</a>
+                    </li>
+                    <li nz-menu-item nzMatchRouter>
+                        <a routerLink="/generate">文档生成</a>
                     </li>
                 </ul>
             </li>

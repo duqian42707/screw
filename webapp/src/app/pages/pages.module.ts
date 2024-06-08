@@ -3,26 +3,38 @@ import {CommonModule} from '@angular/common';
 import {GenerateComponent} from "./generate/generate.component";
 import {NzButtonModule} from "ng-zorro-antd/button";
 import {NzFormModule} from "ng-zorro-antd/form";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NzInputModule} from "ng-zorro-antd/input";
 import {NzSpinModule} from "ng-zorro-antd/spin";
 import {NzRadioModule} from "ng-zorro-antd/radio";
 import {NzSelectModule} from "ng-zorro-antd/select";
 import {NzUploadModule} from "ng-zorro-antd/upload";
+import {DatasourceComponent} from './datasource/datasource.component';
+import {NzModalModule} from "ng-zorro-antd/modal";
+import {NzDividerModule} from "ng-zorro-antd/divider";
+import {NzPopconfirmModule} from "ng-zorro-antd/popconfirm";
+import {NzTableModule} from "ng-zorro-antd/table";
+import {NzMessageModule} from "ng-zorro-antd/message";
 
 
 @NgModule({
-  declarations: [GenerateComponent],
+  declarations: [GenerateComponent, DatasourceComponent],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     NzButtonModule,
     NzFormModule,
-    ReactiveFormsModule,
     NzInputModule,
     NzSpinModule,
     NzRadioModule,
     NzSelectModule,
-    NzUploadModule
+    NzUploadModule,
+    NzModalModule,
+    NzDividerModule,
+    NzPopconfirmModule,
+    NzTableModule,
+    NzMessageModule
   ]
 })
 export class PagesModule {

@@ -2,27 +2,11 @@
   <form nz-form [formGroup]="validateForm" (ngSubmit)="submit()">
     <!-- 数据源连接设置 start  -->
     <nz-form-item>
-      <nz-form-label [nzSpan]="6" nzRequired>Jdbc URL</nz-form-label>
+      <nz-form-label [nzSpan]="6" nzRequired>数据源</nz-form-label>
       <nz-form-control [nzSpan]="18">
-        <input formControlName="dbUrl" nz-input placeholder="请输入 Jdbc URL"/>
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-label [nzSpan]="6" nzRequired>用户名</nz-form-label>
-      <nz-form-control [nzSpan]="18">
-        <input formControlName="dbUsername" nz-input placeholder="请输入用户名"/>
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-label [nzSpan]="6" nzRequired>密码</nz-form-label>
-      <nz-form-control [nzSpan]="18">
-        <input formControlName="dbPassword" nz-input placeholder="请输入密码"/>
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-label [nzSpan]="6">Schema</nz-form-label>
-      <nz-form-control [nzSpan]="18">
-        <input formControlName="dbSchema" nz-input placeholder="数据库模式Schema"/>
+        <nz-select formControlName="datasourceId" nzShowSearch nzAllowClear>
+          <nz-option *ngFor="let item of datasourceList" [nzValue]="item.id" [nzLabel]="item.name"></nz-option>
+        </nz-select>
       </nz-form-control>
     </nz-form-item>
     <!-- 数据源连接设置 end  -->

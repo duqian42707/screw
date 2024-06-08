@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @date 2020/7/22
  */
 
-public interface MainService {
+public interface DocumentService {
     /**
      * 生成文件并下载
      */

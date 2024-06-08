@@ -2,7 +2,7 @@ package com.dqv5.screw.server.web;
 
 import com.dqv5.screw.server.pojo.DbdocConfigDTO;
 import com.dqv5.screw.server.pojo.GenerateResult;
-import com.dqv5.screw.server.service.MainService;
+import com.dqv5.screw.server.service.DocumentService;
 import com.dqv5.screw.server.util.JsonUtil;
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.ClassPathResource;
@@ -27,10 +27,10 @@ import java.nio.file.Files;
  * @date 2023/9/11
  */
 @RestController
-@RequestMapping("/api")
-public class MainController {
+@RequestMapping("/api/document")
+public class DocumentController {
     @Resource
-    private MainService mainService;
+    private DocumentService documentService;
 
 
     @GetMapping("/download-templates")
@@ -58,7 +58,7 @@ public class MainController {
     @PostMapping("/generate")
     public void generate(@RequestParam String json, @RequestParam(required = false) MultipartFile template, HttpServletResponse response) {
         DbdocConfigDTO param = JsonUtil.readValue(json, DbdocConfigDTO.class);
-        GenerateResult result = mainService.generate(param, template);
+        GenerateResult result = documentService.generate(param, template);
         String folderName = result.getFolderName();
         File file = result.getFile();
 
@@ -82,7 +82,7 @@ public class MainController {
         } finally {
             IOUtils.closeQuietly(outputStream);
             IOUtils.closeQuietly(inputStream);
-            mainService.deleteTempFolder(folderName);
+            documentService.deleteTempFolder(folderName);
         }
     }
 }
