@@ -16,30 +16,52 @@ export class GenerateComponent implements OnInit {
 
   loading = false;
   validateForm: FormGroup;
+  uploadAccept = '.ftl';
 
   constructor(private http: HttpClient, private fb: FormBuilder) {
     this.validateForm = this.fb.group({
       datasourceId: [null, [Validators.required]],
-      fileType: ['HTML',],
+      title: ['数据库表结构文档',],
+      description: ['数据库表结构文档',],
       version: ['1.0.0',],
-      description: ['数据库表结构文档',]
+      fileType: ['HTML',],
+      produceType: ['freemarker',],
     })
   }
 
   ngOnInit(): void {
     this.queryDatasourceList();
+    this.validateForm.controls['fileType'].valueChanges.subscribe(value => {
+      const produceType = this.validateForm.controls['produceType'].value;
+      if (value != 'WORD' && produceType == 'poitl') {
+        this.validateForm.patchValue({produceType: 'freemarker'});
+      }
+    });
+    this.validateForm.controls['produceType'].valueChanges.subscribe(value => {
+      if (value == 'velocity') {
+        this.uploadAccept = '.vm';
+      } else if (value == 'poitl') {
+        this.uploadAccept = '.docx';
+      } else {
+        this.uploadAccept = '.ftl';
+      }
+    });
   }
-
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = [file];
     return false;
   };
 
+
   queryDatasourceList() {
-    this.http.get('api/datasource/queryList').subscribe((res: any) => {
+    this.http.get('/api/datasource/queryList').subscribe((res: any) => {
       this.datasourceList = res.data;
     })
+  }
+
+  downloadDefaultTemplate() {
+    window.open('/api/document/download-templates');
   }
 
   submit() {

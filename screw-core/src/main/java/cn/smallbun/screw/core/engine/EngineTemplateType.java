@@ -18,6 +18,7 @@
 package cn.smallbun.screw.core.engine;
 
 import cn.smallbun.screw.core.engine.freemark.FreemarkerTemplateEngine;
+import cn.smallbun.screw.core.engine.poitl.PoitlTemplateEngine;
 import cn.smallbun.screw.core.engine.velocity.VelocityTemplateEngine;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,7 +43,13 @@ public enum EngineTemplateType implements Serializable {
                                                          */
                                                         freemarker("/template/freemarker/",
                                                                    FreemarkerTemplateEngine.class,
-                                                                   ".ftl");
+                                                                   ".ftl"),
+                                                        /**
+                                                         * poi-tl 模板
+                                                         */
+                                                        poitl("/template/poitl/",
+                                                                PoitlTemplateEngine.class,
+                                                                ".docx");
 
     /**
      * 模板目录

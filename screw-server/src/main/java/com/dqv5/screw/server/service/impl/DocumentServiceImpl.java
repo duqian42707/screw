@@ -84,8 +84,9 @@ public class DocumentServiceImpl implements DocumentService {
 
         DataSource dataSource = new HikariDataSource(hikariConfig);
 
-
-        EngineFileType engineFileType = EngineFileType.valueOf(config.getFileType());
+        EngineFileType engineFileType = config.getFileType();
+        EngineTemplateType produceType = config.getProduceType();
+        String title = config.getTitle();
         String description = config.getDescription();
         String version = config.getVersion();
         //生成配置
@@ -95,7 +96,7 @@ public class DocumentServiceImpl implements DocumentService {
                 //文件类型
                 .fileType(engineFileType)
                 //生成模板实现
-                .produceType(EngineTemplateType.freemarker)
+                .produceType(produceType)
                 //自定义模板，模板需要和文件类型和使用模板的语法进行编写和处理，否则将会生成错误
                 .customTemplate(templateFilePath)
                 .build();
@@ -131,6 +132,8 @@ public class DocumentServiceImpl implements DocumentService {
         Configuration configuration = Configuration.builder()
                 //版本
                 .version(version)
+                // 标题
+                .title(title)
                 //描述
                 .description(description)
                 //数据源

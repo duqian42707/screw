@@ -17,6 +17,24 @@
 
     <!-- 文档设置 start  -->
     <nz-form-item>
+      <nz-form-label [nzSpan]="6">标题</nz-form-label>
+      <nz-form-control [nzSpan]="18">
+        <input formControlName="description" nz-input placeholder="请输入标题"/>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6">描述</nz-form-label>
+      <nz-form-control [nzSpan]="18" nzErrorTip="请输入描述!">
+        <input formControlName="description" nz-input placeholder="请输入描述"/>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6">版本</nz-form-label>
+      <nz-form-control [nzSpan]="18" nzErrorTip="请输入版本!">
+        <input formControlName="version" nz-input placeholder="请输入版本"/>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
       <nz-form-label [nzSpan]="6">文件类型</nz-form-label>
       <nz-form-control [nzSpan]="18">
         <nz-radio-group formControlName="fileType" nzButtonStyle="solid">
@@ -27,22 +45,21 @@
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-      <nz-form-label [nzSpan]="6">版本</nz-form-label>
-      <nz-form-control [nzSpan]="18" nzErrorTip="请输入版本!">
-        <input formControlName="version" nz-input placeholder="请输入版本"/>
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-label [nzSpan]="6">描述</nz-form-label>
-      <nz-form-control [nzSpan]="18" nzErrorTip="请输入描述!">
-        <input formControlName="description" nz-input placeholder="请输入描述"/>
+      <nz-form-label [nzSpan]="6">生成引擎</nz-form-label>
+      <nz-form-control [nzSpan]="18">
+        <nz-radio-group formControlName="produceType" nzButtonStyle="solid">
+          <label nz-radio-button nzValue="freemarker">FreeMarker</label>
+          <label nz-radio-button nzValue="velocity">Velocity</label>
+          <label *ngIf="validateForm.controls['fileType'].value=='WORD'" nz-radio-button nzValue="poitl">Poi-tl</label>
+        </nz-radio-group>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
       <nz-form-label [nzSpan]="6">自定义模板</nz-form-label>
       <nz-form-control [nzSpan]="18" nzErrorTip="请输入描述!">
-        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
+        <nz-upload [nzAccept]="uploadAccept" [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
           <button type="button" nz-button><i nz-icon nzType="upload"></i><span>选择文件</span></button>
+          <button type="button" nz-button class="down-template-btn" (click)="downloadDefaultTemplate()">下载内置模板</button>
         </nz-upload>
       </nz-form-control>
     </nz-form-item>
