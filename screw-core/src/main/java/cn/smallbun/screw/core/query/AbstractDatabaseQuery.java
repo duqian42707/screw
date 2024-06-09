@@ -201,4 +201,9 @@ public abstract class AbstractDatabaseQuery implements DatabaseQuery {
     public List<? extends PrimaryKey> getPrimaryKeys() throws QueryException {
         throw ExceptionUtils.mpe(NOT_SUPPORTED);
     }
+
+    @Override
+    public void closeConnection() {
+        JdbcUtils.close(this.connection);
+    }
 }

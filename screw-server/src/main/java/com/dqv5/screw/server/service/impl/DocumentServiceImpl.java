@@ -7,12 +7,12 @@ import cn.smallbun.screw.core.engine.EngineTemplateType;
 import cn.smallbun.screw.core.execute.DocumentationExecute;
 import cn.smallbun.screw.core.process.ProcessConfig;
 import com.dqv5.screw.server.entity.DataSourceInfo;
+import com.dqv5.screw.server.pojo.DataSourceProps;
 import com.dqv5.screw.server.pojo.DbdocConfigDTO;
 import com.dqv5.screw.server.pojo.GenerateResult;
 import com.dqv5.screw.server.repository.DataSourceInfoRepository;
 import com.dqv5.screw.server.service.DocumentService;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import com.dqv5.screw.server.util.DataSourceUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -63,27 +63,22 @@ public class DocumentServiceImpl implements DocumentService {
             }
         }
 
-        HikariConfig hikariConfig = new HikariConfig();
+        DataSourceProps dataSourceProps;
         String datasourceId = config.getDatasourceId();
         if (StringUtils.isNotBlank(datasourceId)) {
             DataSourceInfo dataSourceInfo = dataSourceInfoRepository.findById(datasourceId).orElseThrow(() -> new RuntimeException("参数错误：datasourceId=" + datasourceId));
-            hikariConfig.setJdbcUrl(dataSourceInfo.getDbUrl());
-            hikariConfig.setUsername(dataSourceInfo.getDbUsername());
-            hikariConfig.setPassword(dataSourceInfo.getDbPassword());
-            if (StringUtils.isNotBlank(dataSourceInfo.getDbSchema())) {
-                hikariConfig.setSchema(dataSourceInfo.getDbSchema());
+            dataSourceProps = DataSourceUtil.toDataSourceProps(dataSourceInfo);
+            if (StringUtils.isNotBlank(config.getDbSchema())) {
+                dataSourceProps.setDbSchema(config.getDbSchema());
             }
         } else {
-            hikariConfig.setJdbcUrl(config.getDbUrl());
-            hikariConfig.setUsername(config.getDbUsername());
-            hikariConfig.setPassword(config.getDbPassword());
-            if (StringUtils.isNotBlank(config.getDbSchema())) {
-                hikariConfig.setSchema(config.getDbSchema());
-            }
+            dataSourceProps = new DataSourceProps();
+            dataSourceProps.setDbUrl(config.getDbUrl());
+            dataSourceProps.setDbUsername(config.getDbUsername());
+            dataSourceProps.setDbPassword(config.getDbPassword());
+            dataSourceProps.setDbSchema(config.getDbSchema());
         }
-
-        DataSource dataSource = new HikariDataSource(hikariConfig);
-
+        DataSource dataSource = DataSourceUtil.getDataSource(dataSourceProps);
         EngineFileType engineFileType = config.getFileType();
         EngineTemplateType produceType = config.getProduceType();
         String title = config.getTitle();

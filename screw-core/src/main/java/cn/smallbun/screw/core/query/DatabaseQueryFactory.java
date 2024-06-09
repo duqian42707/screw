@@ -25,6 +25,7 @@ import javax.sql.DataSource;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
@@ -62,9 +63,11 @@ public class DatabaseQueryFactory implements Serializable {
      * @return {@link DatabaseQuery} 数据库查询对象
      */
     public DatabaseQuery newInstance() {
+        Connection connection = null;
         try {
             //获取数据库URL 用于判断数据库类型
-            String url = this.getDataSource().getConnection().getMetaData().getURL();
+            connection = this.getDataSource().getConnection();
+            String url = connection.getMetaData().getURL();
             //获取实现类
             Class<? extends DatabaseQuery> query = JdbcUtils.getDbType(url).getImplClass();
             //获取有参构造
@@ -75,6 +78,8 @@ public class DatabaseQueryFactory implements Serializable {
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException
                 | InvocationTargetException | SQLException e) {
             throw ExceptionUtils.mpe(e);
+        } finally {
+            JdbcUtils.close(connection);
         }
     }
 }

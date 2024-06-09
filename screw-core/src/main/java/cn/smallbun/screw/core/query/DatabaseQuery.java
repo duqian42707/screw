@@ -83,4 +83,9 @@ public interface DatabaseQuery extends Serializable {
      * @throws QueryException QueryException
      */
     List<? extends PrimaryKey> getPrimaryKeys() throws QueryException;
+
+    /**
+     * 关闭数据库连接
+     */
+    void closeConnection();
 }

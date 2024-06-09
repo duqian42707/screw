@@ -151,6 +151,8 @@ public class DataModelProcess extends AbstractProcess {
         /*封装数据结束*/
         logger.debug("encapsulation processing data time consuming:{}ms",
             (System.currentTimeMillis() - start));
+        // 用完关闭数据库连接
+        query.closeConnection();
         return model;
     }
 
