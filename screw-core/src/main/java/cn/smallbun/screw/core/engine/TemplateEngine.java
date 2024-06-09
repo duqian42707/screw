@@ -36,6 +36,7 @@ public interface TemplateEngine extends Serializable {
      * @param info    {@link DataModel}
      * @param docName {@link String}
      * @throws ProduceException ProduceException
+     * @return 生成的文件
      */
     File produce(DataModel info, String docName) throws ProduceException;
 

@@ -48,8 +48,7 @@ public enum EngineTemplateType implements Serializable {
                                                          * poi-tl 模板
                                                          */
                                                         poitl("/template/poitl/",
-                                                                PoitlTemplateEngine.class,
-                                                                ".docx");
+                                                              PoitlTemplateEngine.class, ".docx");
 
     /**
      * 模板目录

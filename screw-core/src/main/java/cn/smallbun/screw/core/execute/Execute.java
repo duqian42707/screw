@@ -29,12 +29,14 @@ import java.io.File;
 public interface Execute {
     /**
      * 执行生成
+     * @return 生成的文件
      */
     File execute();
 
     /**
      * 执行生成
      * @param query 自定义查询器
+     * @return 生成的文件
      */
     File execute(DatabaseQuery query);
 }
