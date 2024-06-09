@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {NzMessageService} from "ng-zorro-antd/message";
+import {DataSourceInfo} from "../../common/datasource.model";
 
 @Component({
   selector: 'app-datasource',
@@ -14,7 +15,7 @@ export class DatasourceComponent {
   // 列表数据总条数
   total: number = 0;
   // 列表数据（当前页）
-  dataSet: any[] = [];
+  dataSet: DataSourceInfo[] = [];
   // 编辑弹框
   editModal = {
     // 编辑弹框是否显示
@@ -63,7 +64,7 @@ export class DatasourceComponent {
   /**
    * 打开编辑弹框
    */
-  openEditModal(data?: any) {
+  openEditModal(data?: DataSourceInfo) {
     this.editModal.isVisible = true;
     // 重置表单数据
     this.validateForm.reset();

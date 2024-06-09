@@ -4,6 +4,7 @@ import {downloadFromResponse} from "../../utils/http-download";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NzUploadFile} from "ng-zorro-antd/upload";
 import {filter} from "rxjs";
+import {DataSourceInfo} from "../../common/datasource.model";
 
 @Component({
   selector: 'app-generate',
@@ -11,7 +12,7 @@ import {filter} from "rxjs";
   styleUrls: ['./generate.component.less']
 })
 export class GenerateComponent implements OnInit {
-  datasourceList: any[] = [];
+  datasourceList: DataSourceInfo[] = [];
   fileList: NzUploadFile[] = [];
 
   loading = false;
@@ -21,6 +22,7 @@ export class GenerateComponent implements OnInit {
   constructor(private http: HttpClient, private fb: FormBuilder) {
     this.validateForm = this.fb.group({
       datasourceId: [null, [Validators.required]],
+      dbSchema: [null,],
       title: ['数据库表结构文档',],
       description: ['数据库表结构文档',],
       version: ['1.0.0',],
@@ -31,6 +33,12 @@ export class GenerateComponent implements OnInit {
 
   ngOnInit(): void {
     this.queryDatasourceList();
+    this.validateForm.controls['datasourceId'].valueChanges.subscribe(value => {
+      const dataSourceInfo = this.datasourceList.filter(x => x.id === value)[0];
+      if (dataSourceInfo) {
+        this.validateForm.patchValue({dbSchema: dataSourceInfo.dbSchema});
+      }
+    });
     this.validateForm.controls['fileType'].valueChanges.subscribe(value => {
       const produceType = this.validateForm.controls['produceType'].value;
       if (value != 'WORD' && produceType == 'poitl') {
