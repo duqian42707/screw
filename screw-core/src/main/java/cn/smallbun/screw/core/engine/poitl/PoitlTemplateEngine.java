@@ -62,7 +62,8 @@ public class PoitlTemplateEngine extends AbstractTemplateEngine {
                 inputStream = this.getClass().getResourceAsStream(defaultPath);
             }
             LoopRowTableRenderPolicy policy = new LoopRowTableRenderPolicy();
-            Configure config = Configure.builder().bind("columns", policy).useSpringEL().build();
+            Configure config = Configure.builder().bind("columns", policy).bind("tables", policy)
+                .useSpringEL().build();
             XWPFTemplate template = XWPFTemplate.compile(inputStream, config);
             // create file
             File file = getFile(docName);
