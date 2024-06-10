@@ -59,7 +59,6 @@ public class DataSourceUtil {
         hikariConfig.setUsername(dataSourceProps.getDbUsername());
         hikariConfig.setPassword(dataSourceProps.getDbPassword());
         hikariConfig.setMaximumPoolSize(3);
-        hikariConfig.setMaxLifetime(3);
         if (StringUtils.isNotBlank(dataSourceProps.getDbSchema())) {
             hikariConfig.setSchema(dataSourceProps.getDbSchema());
         }
