@@ -59,7 +59,8 @@ public class DocumentController {
     }
 
     @GetMapping("/list-tables")
-    public ResponseEntity<CommonResponse<List<TableModel>>> listTables(String datasourceId, String dbSchema) {
+    public ResponseEntity<CommonResponse<List<TableModel>>> listTables(String datasourceId,
+                                                                       String dbSchema) {
         List<TableModel> list = documentService.listTables(datasourceId, dbSchema);
         return ResponseEntity.ok(CommonResponse.build(true, "查询成功", list));
     }
@@ -79,7 +80,7 @@ public class DocumentController {
         headers.add("Expires", "0");
 
         return ResponseEntity.ok().headers(headers).contentLength(inputStream.available())
-                .contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
+            .contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
     }
 
     @PostMapping("/generate")
@@ -99,7 +100,7 @@ public class DocumentController {
 
             String filename = URLEncoder.encode(file.getName(), "UTF-8");
             response.setHeader("Content-Disposition",
-                    String.format("attachment;filename=%s", filename));
+                String.format("attachment;filename=%s", filename));
             response.setHeader("Cache-Control", "no-cache,no-store,must-revalidate");
             response.setHeader("Pragma", "no-cache");
             response.setHeader("Expires", "0");

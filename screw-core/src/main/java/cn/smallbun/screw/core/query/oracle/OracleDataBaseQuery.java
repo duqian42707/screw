@@ -89,7 +89,7 @@ public class OracleDataBaseQuery extends AbstractDatabaseQuery {
         try {
             //查询
             resultSet = getMetaData().getTables(getCatalog(), getSchema(), PERCENT_SIGN,
-                    new String[]{"TABLE"});
+                new String[] { "TABLE" });
             //映射
             List<OracleTableModel> list = Mapping.convertList(resultSet, OracleTableModel.class);
             //由于ORACLE 查询 REMARKS 非常耗费性能，所以这里使用自定义SQL查询
@@ -99,17 +99,17 @@ public class OracleDataBaseQuery extends AbstractDatabaseQuery {
             if (isDba()) {
                 //DBA 使用 DBA_TAB_COMMENTS 进行查询 Oracle连接用户和schema不同问题。dba连接用户可以生成不同schema下的表结构
                 sql = "SELECT TABLE_NAME,COMMENTS AS REMARKS FROM DBA_TAB_COMMENTS WHERE TABLE_TYPE = 'TABLE' AND OWNER = '"
-                        + getSchema() + "'";
+                      + getSchema() + "'";
             }
             resultSet = prepareStatement(String.format(sql, getSchema())).executeQuery();
             List<OracleTableModel> inquires = Mapping.convertList(resultSet,
-                    OracleTableModel.class);
+                OracleTableModel.class);
             //处理备注信息
             list.forEach((OracleTableModel model) -> {
                 //备注
                 inquires.stream()
-                        .filter(inquire -> model.getTableName().equals(inquire.getTableName()))
-                        .forEachOrdered(inquire -> model.setRemarks(inquire.getRemarks()));
+                    .filter(inquire -> model.getTableName().equals(inquire.getTableName()))
+                    .forEachOrdered(inquire -> model.setRemarks(inquire.getRemarks()));
             });
             return list;
         } catch (SQLException e) {
@@ -137,14 +137,14 @@ public class OracleDataBaseQuery extends AbstractDatabaseQuery {
             //由于ORACLE 查询 COLUMNS REMARKS 为NULL，所以这里使用自定义SQL查询
             //https://docs.oracle.com/en/database/oracle/oracle-database/20/jjdbc/performance-extensions.html#GUID-15865071-39F2-430F-9EDA-EB34D0B2D560
             List<String> tableNames = list.stream().map(OracleColumnModel::getTableName)
-                    .collect(Collectors.toList()).stream().distinct().collect(Collectors.toList());
+                .collect(Collectors.toList()).stream().distinct().collect(Collectors.toList());
             if (CollectionUtils.isEmpty(columnsCaching)) {
                 //查询全部
                 if (table.equals(PERCENT_SIGN)) {
                     String sql = "SELECT ut.TABLE_NAME,  ut.COLUMN_NAME, uc.comments as REMARKS, concat(concat(concat(ut.DATA_TYPE, '('), ut.DATA_LENGTH), ')') AS COLUMN_TYPE, ut.DATA_LENGTH as COLUMN_LENGTH FROM user_tab_columns ut INNER JOIN user_col_comments uc ON ut.TABLE_NAME = uc.table_name AND ut.COLUMN_NAME = uc.column_name";
                     if (isDba()) {
                         sql = "SELECT ut.TABLE_NAME,  ut.COLUMN_NAME, uc.comments as REMARKS, concat(concat(concat(ut.DATA_TYPE, '('), ut.DATA_LENGTH), ')') AS COLUMN_TYPE, ut.DATA_LENGTH as COLUMN_LENGTH FROM dba_tab_columns ut INNER JOIN dba_col_comments uc ON ut.TABLE_NAME = uc.table_name AND ut.COLUMN_NAME = uc.column_name and ut.OWNER = uc.OWNER WHERE ut.OWNER = '"
-                                + getDataBase() + "'";
+                              + getDataBase() + "'";
                     }
                     PreparedStatement statement = prepareStatement(sql);
                     resultSet = statement.executeQuery();
@@ -158,15 +158,15 @@ public class OracleDataBaseQuery extends AbstractDatabaseQuery {
                     String sql = "SELECT ut.TABLE_NAME,  ut.COLUMN_NAME, uc.comments as REMARKS, concat(concat(concat(ut.DATA_TYPE, '('), ut.DATA_LENGTH), ')') AS COLUMN_TYPE, ut.DATA_LENGTH as COLUMN_LENGTH FROM user_tab_columns ut INNER JOIN user_col_comments uc ON ut.TABLE_NAME = uc.table_name AND ut.COLUMN_NAME = uc.column_name WHERE ut.Table_Name = '%s'";
                     if (isDba()) {
                         sql = "SELECT ut.TABLE_NAME,  ut.COLUMN_NAME, uc.comments as REMARKS, concat(concat(concat(ut.DATA_TYPE, '('), ut.DATA_LENGTH), ')') AS COLUMN_TYPE, ut.DATA_LENGTH as COLUMN_LENGTH FROM dba_tab_columns ut INNER JOIN dba_col_comments uc ON ut.TABLE_NAME = uc.table_name AND ut.COLUMN_NAME = uc.column_name and ut.OWNER = uc.OWNER WHERE ut.Table_Name = '%s' ut.OWNER = '"
-                                + getDataBase() + "'";
+                              + getDataBase() + "'";
                     }
                     resultSet = prepareStatement(String.format(sql, table)).executeQuery();
                 }
                 List<OracleColumnModel> inquires = Mapping.convertList(resultSet,
-                        OracleColumnModel.class);
+                    OracleColumnModel.class);
                 //处理列，表名为key，列名为值
                 tableNames.forEach(name -> columnsCaching.put(name, inquires.stream()
-                        .filter(i -> i.getTableName().equals(name)).collect(Collectors.toList())));
+                    .filter(i -> i.getTableName().equals(name)).collect(Collectors.toList())));
             }
             //处理备注信息
             //从缓存中根据表名获取列信息
@@ -175,7 +175,7 @@ public class OracleDataBaseQuery extends AbstractDatabaseQuery {
                 columns.forEach(j -> {
                     //列名表名一致
                     if (i.getColumnName().equals(j.getColumnName())
-                            && i.getTableName().equals(j.getTableName())) {
+                        && i.getTableName().equals(j.getTableName())) {
                         //放入备注
                         i.setRemarks(j.getRemarks());
                         i.setColumnLength(j.getColumnLength());
@@ -238,7 +238,7 @@ public class OracleDataBaseQuery extends AbstractDatabaseQuery {
             String sql = "SELECT NULL AS TABLE_CAT, C.OWNER AS TABLE_SCHEM, C.TABLE_NAME, C.COLUMN_NAME, C.POSITION AS KEY_SEQ, C.CONSTRAINT_NAME AS PK_NAME FROM ALL_CONS_COLUMNS C, ALL_CONSTRAINTS K WHERE K.CONSTRAINT_TYPE = 'P' AND K.OWNER LIKE '%s' ESCAPE '/' AND K.CONSTRAINT_NAME = C.CONSTRAINT_NAME AND K.TABLE_NAME = C.TABLE_NAME AND K.OWNER = C.OWNER ORDER BY COLUMN_NAME ";
             // 拼接参数
             resultSet = prepareStatement(String.format(sql, getDataBase().getDatabase()))
-                    .executeQuery();
+                .executeQuery();
             return Mapping.convertList(resultSet, OraclePrimaryKeyModel.class);
         } catch (SQLException e) {
             throw new QueryException(e);
@@ -268,7 +268,7 @@ public class OracleDataBaseQuery extends AbstractDatabaseQuery {
         try {
             //判断是否是DBA
             resultSet = prepareStatement("SELECT USERENV('isdba') as IS_DBA FROM DUAL")
-                    .executeQuery();
+                .executeQuery();
             String dbaColumn = "IS_DBA";
             resultSet.next();
             return resultSet.getBoolean(dbaColumn);
