@@ -144,7 +144,7 @@ public class OracleDataBaseQuery extends AbstractDatabaseQuery {
                     String sql = "SELECT ut.TABLE_NAME,  ut.COLUMN_NAME, uc.comments as REMARKS, concat(concat(concat(ut.DATA_TYPE, '('), ut.DATA_LENGTH), ')') AS COLUMN_TYPE, ut.DATA_LENGTH as COLUMN_LENGTH FROM user_tab_columns ut INNER JOIN user_col_comments uc ON ut.TABLE_NAME = uc.table_name AND ut.COLUMN_NAME = uc.column_name";
                     if (isDba()) {
                         sql = "SELECT ut.TABLE_NAME,  ut.COLUMN_NAME, uc.comments as REMARKS, concat(concat(concat(ut.DATA_TYPE, '('), ut.DATA_LENGTH), ')') AS COLUMN_TYPE, ut.DATA_LENGTH as COLUMN_LENGTH FROM dba_tab_columns ut INNER JOIN dba_col_comments uc ON ut.TABLE_NAME = uc.table_name AND ut.COLUMN_NAME = uc.column_name and ut.OWNER = uc.OWNER WHERE ut.OWNER = '"
-                              + getDataBase() + "'";
+                              + getDataBase().getDatabase() + "'";
                     }
                     PreparedStatement statement = prepareStatement(sql);
                     resultSet = statement.executeQuery();
@@ -158,7 +158,7 @@ public class OracleDataBaseQuery extends AbstractDatabaseQuery {
                     String sql = "SELECT ut.TABLE_NAME,  ut.COLUMN_NAME, uc.comments as REMARKS, concat(concat(concat(ut.DATA_TYPE, '('), ut.DATA_LENGTH), ')') AS COLUMN_TYPE, ut.DATA_LENGTH as COLUMN_LENGTH FROM user_tab_columns ut INNER JOIN user_col_comments uc ON ut.TABLE_NAME = uc.table_name AND ut.COLUMN_NAME = uc.column_name WHERE ut.Table_Name = '%s'";
                     if (isDba()) {
                         sql = "SELECT ut.TABLE_NAME,  ut.COLUMN_NAME, uc.comments as REMARKS, concat(concat(concat(ut.DATA_TYPE, '('), ut.DATA_LENGTH), ')') AS COLUMN_TYPE, ut.DATA_LENGTH as COLUMN_LENGTH FROM dba_tab_columns ut INNER JOIN dba_col_comments uc ON ut.TABLE_NAME = uc.table_name AND ut.COLUMN_NAME = uc.column_name and ut.OWNER = uc.OWNER WHERE ut.Table_Name = '%s' ut.OWNER = '"
-                              + getDataBase() + "'";
+                              + getDataBase().getDatabase() + "'";
                     }
                     resultSet = prepareStatement(String.format(sql, table)).executeQuery();
                 }
