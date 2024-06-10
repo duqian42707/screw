@@ -1,0 +1,53 @@
+<div>
+  <button nz-button type="button" [disabled]="!datasourceId" (click)="openModal()">选择</button>
+  <span style="margin-left: 5px">已选：{{ selectedCount }}</span>
+</div>
+<nz-modal [nzTitle]="'选择表'" [nzWidth]="'1050px'" [nzOkLoading]="loading"
+          [(nzVisible)]="modal.visible" (nzOnOk)="selectOk()" (nzOnCancel)="closeModal()">
+  <ng-container *nzModalContent>
+    <nz-transfer nzShowSearch
+                 [nzDataSource]="list"
+                 [nzDisabled]="disabled"
+                 [nzFilterOption]="filterOption"
+                 [nzTitles]="['未选择', '已选择']"
+                 [nzRenderList]="[renderList, renderList]"
+                 [nzSelectedKeys]="['0', '2']"
+    >
+      <ng-template
+        #renderList
+        let-items
+        let-direction="direction"
+        let-stat="stat"
+        let-disabled="disabled"
+        let-onItemSelectAll="onItemSelectAll"
+        let-onItemSelect="onItemSelect"
+      >
+        <nz-table #t nzSize="small" [nzScroll]="{x:'450px',y:'400px'}" [nzLoading]="loading"
+                  [nzData]="$asTransferItems(items)" [nzFrontPagination]="false">
+          <thead>
+          <tr>
+            <th nzWidth="50px"
+                [nzChecked]="stat.checkAll"
+                [nzIndeterminate]="stat.checkHalf"
+                (nzCheckedChange)="onItemSelectAll($event)"
+            ></th>
+            <th nzWidth="200px">表名</th>
+            <th nzWidth="200px">描述</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let data of t.data" (click)="onItemSelect(data)">
+            <td [nzChecked]="!!data.checked" (nzCheckedChange)="onItemSelect(data)"></td>
+            <td>
+              <span class="textOverflow" nz-tooltip [nzTooltipTitle]="data.title" nzTooltipPlacement="topLeft">{{data.title}}</span>
+            </td>
+            <td>
+              <span class="textOverflow" nz-tooltip [nzTooltipTitle]="data['remarks']" nzTooltipPlacement="topLeft">{{data['remarks']}}</span>
+            </td>
+          </tr>
+          </tbody>
+        </nz-table>
+      </ng-template>
+    </nz-transfer>
+  </ng-container>
+</nz-modal>

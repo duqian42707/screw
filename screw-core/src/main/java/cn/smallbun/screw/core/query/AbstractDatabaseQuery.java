@@ -29,6 +29,7 @@ import lombok.Getter;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -200,6 +201,24 @@ public abstract class AbstractDatabaseQuery implements DatabaseQuery {
     @Override
     public List<? extends PrimaryKey> getPrimaryKeys() throws QueryException {
         throw ExceptionUtils.mpe(NOT_SUPPORTED);
+    }
+
+    @Override
+    public List<String> getSchemas() throws QueryException {
+        List<String> result = new ArrayList<>();
+        ResultSet resultSet = null;
+        try {
+            resultSet = getMetaData().getSchemas();
+            while (resultSet.next()) {
+                String tableSchem = resultSet.getString("TABLE_SCHEM");
+                result.add(tableSchem);
+            }
+            return result;
+        } catch (SQLException e) {
+            throw ExceptionUtils.mpe(e);
+        } finally {
+            JdbcUtils.close(resultSet, this.connection);
+        }
     }
 
     @Override

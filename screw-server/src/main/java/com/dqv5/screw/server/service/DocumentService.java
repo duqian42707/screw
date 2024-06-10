@@ -17,9 +17,12 @@
  */
 package com.dqv5.screw.server.service;
 
+import cn.smallbun.screw.core.metadata.model.TableModel;
 import com.dqv5.screw.server.pojo.DbdocConfigDTO;
 import com.dqv5.screw.server.pojo.GenerateResult;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * @author duqian
@@ -27,6 +30,10 @@ import org.springframework.web.multipart.MultipartFile;
  */
 
 public interface DocumentService {
+    List<String> listSchemas(String datasourceId);
+
+    List<TableModel> listTables(String datasourceId, String dbSchema);
+
     /**
      * 生成文件并下载
      */

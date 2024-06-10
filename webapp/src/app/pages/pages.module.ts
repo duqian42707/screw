@@ -33,10 +33,12 @@ import {NzDividerModule} from "ng-zorro-antd/divider";
 import {NzPopconfirmModule} from "ng-zorro-antd/popconfirm";
 import {NzTableModule} from "ng-zorro-antd/table";
 import {NzMessageModule} from "ng-zorro-antd/message";
+import {TableSelectorModule} from "../common/table-selector/table-selector.module";
+import { DocsComponent } from './docs/docs.component';
 
 
 @NgModule({
-  declarations: [GenerateComponent, DatasourceComponent],
+  declarations: [GenerateComponent, DatasourceComponent, DocsComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -52,7 +54,8 @@ import {NzMessageModule} from "ng-zorro-antd/message";
     NzDividerModule,
     NzPopconfirmModule,
     NzTableModule,
-    NzMessageModule
+    NzMessageModule,
+    TableSelectorModule
   ]
 })
 export class PagesModule {

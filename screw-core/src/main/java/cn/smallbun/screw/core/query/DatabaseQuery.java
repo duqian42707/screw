@@ -43,6 +43,14 @@ public interface DatabaseQuery extends Serializable {
     Database getDataBase() throws QueryException;
 
     /**
+     * 获取数据库Schemas
+     *
+     * @return {@link Database} 数据库Schema信息
+     * @throws QueryException QueryException
+     */
+    List<String> getSchemas() throws QueryException;
+
+    /**
      * 获取表信息
      *
      * @return {@link List} 所有表信息

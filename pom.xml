@@ -407,6 +407,8 @@
                         <exclude>**/.gitkeep</exclude>
                         <exclude>**/spring.factories</exclude>
                         <exclude>**/resources/template/**</exclude>
+                        <exclude>screw-server/src/main/resources/static/**</exclude>
+                        <exclude>webapp/**</exclude>
                     </excludes>
                     <strictCheck>true</strictCheck>
                     <mapping>

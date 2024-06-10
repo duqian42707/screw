@@ -31,16 +31,26 @@ import {DataSourceInfo} from "../../common/datasource.model";
 })
 export class GenerateComponent implements OnInit {
   datasourceList: DataSourceInfo[] = [];
+  schemaList: string[] = [];
   fileList: NzUploadFile[] = [];
 
   loading = false;
   validateForm: FormGroup;
   uploadAccept = '.ftl';
 
+  get selectedDatasourceId() {
+    return this.validateForm.controls['datasourceId'].value;
+  }
+
+  get selectedDbSchema() {
+    return this.validateForm.controls['dbSchema'].value;
+  }
+
   constructor(private http: HttpClient, private fb: FormBuilder) {
     this.validateForm = this.fb.group({
       datasourceId: [null, [Validators.required]],
       dbSchema: [null,],
+      tableNames: [[],],
       title: ['数据库表结构文档',],
       description: ['数据库表结构文档',],
       version: ['1.0.0',],
@@ -54,6 +64,7 @@ export class GenerateComponent implements OnInit {
     this.validateForm.controls['datasourceId'].valueChanges.subscribe(value => {
       const dataSourceInfo = this.datasourceList.filter(x => x.id === value)[0];
       if (dataSourceInfo) {
+        this.getSchemaList(value);
         this.validateForm.patchValue({dbSchema: dataSourceInfo.dbSchema});
       }
     });
@@ -83,6 +94,13 @@ export class GenerateComponent implements OnInit {
   queryDatasourceList() {
     this.http.get('/api/datasource/queryList').subscribe((res: any) => {
       this.datasourceList = res.data;
+    })
+  }
+
+  getSchemaList(datasourceId: string) {
+    this.schemaList = [];
+    this.http.get('/api/document/list-schemas?datasourceId=' + datasourceId).subscribe((res: any) => {
+      this.schemaList = res.data;
     })
   }
 

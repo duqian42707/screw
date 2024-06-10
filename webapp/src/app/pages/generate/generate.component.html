@@ -31,7 +31,15 @@
     <nz-form-item>
       <nz-form-label [nzSpan]="6">Schema</nz-form-label>
       <nz-form-control [nzSpan]="18">
-        <input formControlName="dbSchema" nz-input placeholder="请输入Schema"/>
+        <nz-select formControlName="dbSchema" nzShowSearch nzAllowClear>
+          <nz-option *ngFor="let item of schemaList" [nzValue]="item" [nzLabel]="item"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6">Tables</nz-form-label>
+      <nz-form-control [nzSpan]="18">
+        <app-table-selector formControlName="tableNames" [datasourceId]="selectedDatasourceId" [dbSchema]="selectedDbSchema"></app-table-selector>
       </nz-form-control>
     </nz-form-item>
     <!-- 数据源连接设置 end  -->

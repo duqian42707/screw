@@ -17,6 +17,8 @@
  */
 package com.dqv5.screw.server.web;
 
+import cn.smallbun.screw.core.metadata.model.TableModel;
+import com.dqv5.screw.server.pojo.CommonResponse;
 import com.dqv5.screw.server.pojo.DbdocConfigDTO;
 import com.dqv5.screw.server.pojo.GenerateResult;
 import com.dqv5.screw.server.service.DocumentService;
@@ -38,6 +40,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.nio.file.Files;
+import java.util.List;
 
 /**
  * @author duqian
@@ -48,6 +51,18 @@ import java.nio.file.Files;
 public class DocumentController {
     @Resource
     private DocumentService documentService;
+
+    @GetMapping("/list-schemas")
+    public ResponseEntity<CommonResponse<List<String>>> listSchemas(String datasourceId) {
+        List<String> list = documentService.listSchemas(datasourceId);
+        return ResponseEntity.ok(CommonResponse.build(true, "查询成功", list));
+    }
+
+    @GetMapping("/list-tables")
+    public ResponseEntity<CommonResponse<List<TableModel>>> listTables(String datasourceId, String dbSchema) {
+        List<TableModel> list = documentService.listTables(datasourceId, dbSchema);
+        return ResponseEntity.ok(CommonResponse.build(true, "查询成功", list));
+    }
 
     @GetMapping("/download-templates")
     public ResponseEntity<InputStreamResource> downloadTemplates(HttpServletResponse response) throws IOException {
@@ -64,7 +79,7 @@ public class DocumentController {
         headers.add("Expires", "0");
 
         return ResponseEntity.ok().headers(headers).contentLength(inputStream.available())
-            .contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
+                .contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
     }
 
     @PostMapping("/generate")
@@ -84,7 +99,7 @@ public class DocumentController {
 
             String filename = URLEncoder.encode(file.getName(), "UTF-8");
             response.setHeader("Content-Disposition",
-                String.format("attachment;filename=%s", filename));
+                    String.format("attachment;filename=%s", filename));
             response.setHeader("Cache-Control", "no-cache,no-store,must-revalidate");
             response.setHeader("Pragma", "no-cache");
             response.setHeader("Expires", "0");
