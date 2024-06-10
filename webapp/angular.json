@@ -31,9 +31,12 @@
             ],
             "styles": [
               "./node_modules/ng-zorro-antd/ng-zorro-antd.min.css",
-              "src/styles.less"
+              "src/styles.less",
+              "node_modules/prismjs/themes/prism-okaidia.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/marked/marked.min.js"
+            ]
           },
           "configurations": {
             "production": {

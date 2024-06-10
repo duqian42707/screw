@@ -35,6 +35,7 @@ import {NzTableModule} from "ng-zorro-antd/table";
 import {NzMessageModule} from "ng-zorro-antd/message";
 import {TableSelectorModule} from "../common/table-selector/table-selector.module";
 import { DocsComponent } from './docs/docs.component';
+import {MarkdownModule} from "ngx-markdown";
 
 
 @NgModule({
@@ -55,7 +56,8 @@ import { DocsComponent } from './docs/docs.component';
     NzPopconfirmModule,
     NzTableModule,
     NzMessageModule,
-    TableSelectorModule
+    TableSelectorModule,
+    MarkdownModule.forRoot()
   ]
 })
 export class PagesModule {
