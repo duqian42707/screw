@@ -2,6 +2,7 @@ import {Component, EventEmitter, forwardRef, Input, OnInit, Output} from '@angul
 import {HttpClient} from "@angular/common/http";
 import {ControlValueAccessor, FormBuilder, NG_VALUE_ACCESSOR} from "@angular/forms";
 import {TransferItem} from "ng-zorro-antd/transfer";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-table-selector',
@@ -110,7 +111,7 @@ export class TableSelectorComponent implements OnInit, ControlValueAccessor {
   getTableList() {
     console.debug('this.innerValue: ', this.innerValue)
     this.loading = true;
-    this.http.get(`./api/document/list-tables?datasourceId=${this.datasourceId}&dbSchema=${this.dbSchema}`).subscribe((res: any) => {
+    this.http.get(`${environment.apiPrefix}/api/document/list-tables?datasourceId=${this.datasourceId}&dbSchema=${this.dbSchema}`).subscribe((res: any) => {
       this.loading = false;
       this.list = res.data.map((x: any) => {
         return {

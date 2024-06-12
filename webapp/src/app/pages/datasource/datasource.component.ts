@@ -21,6 +21,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {NzMessageService} from "ng-zorro-antd/message";
 import {DataSourceInfo} from "../../common/datasource.model";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-datasource',
@@ -70,7 +71,7 @@ export class DatasourceComponent {
    */
   queryListForPage() {
     this.loading = true;
-    this.http.get(`./api/datasource/queryList`).subscribe((res: any) => {
+    this.http.get(`${environment.apiPrefix}/api/datasource/queryList`).subscribe((res: any) => {
       this.loading = false;
       this.dataSet = res.data;
       this.total = res.data.length;
@@ -112,9 +113,9 @@ export class DatasourceComponent {
     const data = this.validateForm.getRawValue();
     let api;
     if (data.id) {
-      api = `./api/datasource/update`;
+      api = `${environment.apiPrefix}/api/datasource/update`;
     } else {
-      api = `./api/datasource/insert`;
+      api = `${environment.apiPrefix}/api/datasource/insert`;
     }
     this.editModal.saveLoading = true;
     this.http.post(api, data).subscribe((res: any) => {
@@ -135,7 +136,7 @@ export class DatasourceComponent {
   deleteData(record: any) {
     const id = record.id;
     this.loading = true;
-    this.http.post(`./api/datasource/delete/${id}`, {}).subscribe((res: any) => {
+    this.http.post(`${environment.apiPrefix}/api/datasource/delete/${id}`, {}).subscribe((res: any) => {
       // 操作成功，关闭加载中状态，给出提示信息，重新加载列表数据。
       this.loading = false;
       this.msg.success(res.msg);

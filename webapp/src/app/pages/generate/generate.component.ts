@@ -23,6 +23,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NzUploadFile} from "ng-zorro-antd/upload";
 import {filter} from "rxjs";
 import {DataSourceInfo} from "../../common/datasource.model";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-generate',
@@ -92,20 +93,20 @@ export class GenerateComponent implements OnInit {
 
 
   queryDatasourceList() {
-    this.http.get('./api/datasource/queryList').subscribe((res: any) => {
+    this.http.get(`${environment.apiPrefix}/api/datasource/queryList`).subscribe((res: any) => {
       this.datasourceList = res.data;
     })
   }
 
   getSchemaList(datasourceId: string) {
     this.schemaList = [];
-    this.http.get('./api/document/list-schemas?datasourceId=' + datasourceId).subscribe((res: any) => {
+    this.http.get(`${environment.apiPrefix}/api/document/list-schemas?datasourceId=` + datasourceId).subscribe((res: any) => {
       this.schemaList = res.data;
     })
   }
 
   downloadDefaultTemplate() {
-    window.open('./api/document/download-templates');
+    window.open(`${environment.apiPrefix}/api/document/download-templates`);
   }
 
   submit() {
@@ -117,7 +118,7 @@ export class GenerateComponent implements OnInit {
     }
     this.loading = true;
 
-    const req = new HttpRequest('POST', './api/document/generate', data, {
+    const req = new HttpRequest('POST', `${environment.apiPrefix}/api/document/generate`, data, {
       reportProgress: true,
       responseType: 'blob',
     });
