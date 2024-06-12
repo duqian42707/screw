@@ -110,7 +110,7 @@ export class TableSelectorComponent implements OnInit, ControlValueAccessor {
   getTableList() {
     console.debug('this.innerValue: ', this.innerValue)
     this.loading = true;
-    this.http.get(`/api/document/list-tables?datasourceId=${this.datasourceId}&dbSchema=${this.dbSchema}`).subscribe((res: any) => {
+    this.http.get(`./api/document/list-tables?datasourceId=${this.datasourceId}&dbSchema=${this.dbSchema}`).subscribe((res: any) => {
       this.loading = false;
       this.list = res.data.map((x: any) => {
         return {

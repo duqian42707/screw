@@ -92,20 +92,20 @@ export class GenerateComponent implements OnInit {
 
 
   queryDatasourceList() {
-    this.http.get('/api/datasource/queryList').subscribe((res: any) => {
+    this.http.get('./api/datasource/queryList').subscribe((res: any) => {
       this.datasourceList = res.data;
     })
   }
 
   getSchemaList(datasourceId: string) {
     this.schemaList = [];
-    this.http.get('/api/document/list-schemas?datasourceId=' + datasourceId).subscribe((res: any) => {
+    this.http.get('./api/document/list-schemas?datasourceId=' + datasourceId).subscribe((res: any) => {
       this.schemaList = res.data;
     })
   }
 
   downloadDefaultTemplate() {
-    window.open('/api/document/download-templates');
+    window.open('./api/document/download-templates');
   }
 
   submit() {
@@ -117,7 +117,7 @@ export class GenerateComponent implements OnInit {
     }
     this.loading = true;
 
-    const req = new HttpRequest('POST', '/api/document/generate', data, {
+    const req = new HttpRequest('POST', './api/document/generate', data, {
       reportProgress: true,
       responseType: 'blob',
     });
