@@ -1,8 +1,9 @@
-import {Component, EventEmitter, forwardRef, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, forwardRef, Input, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {ControlValueAccessor, FormBuilder, NG_VALUE_ACCESSOR} from "@angular/forms";
+import {ControlValueAccessor, NG_VALUE_ACCESSOR} from "@angular/forms";
 import {TransferItem} from "ng-zorro-antd/transfer";
 import {environment} from "../../../environments/environment";
+import {NzModalService} from "ng-zorro-antd/modal";
 
 @Component({
   selector: 'app-table-selector',
@@ -27,6 +28,10 @@ export class TableSelectorComponent implements OnInit, ControlValueAccessor {
     visible: false,
   };
 
+  editTableModal = {
+    tableNames: ''
+  }
+
   $asTransferItems = (data: unknown): TransferItem[] => data as TransferItem[];
 
   filterOption(inputValue: string, item: any): boolean {
@@ -37,7 +42,7 @@ export class TableSelectorComponent implements OnInit, ControlValueAccessor {
   private onChangeCallback: any = () => void 0;
 
   get selectedCount() {
-    return this.list.filter(x => x.direction === 'right').length;
+    return this.value.length;
   }
 
 
@@ -54,7 +59,9 @@ export class TableSelectorComponent implements OnInit, ControlValueAccessor {
     }
   }
 
-  constructor(private http: HttpClient, private fb: FormBuilder) {
+  @ViewChild("editTablesTpl") editTablesTpl!: TemplateRef<any>;
+
+  constructor(private http: HttpClient, private modalService: NzModalService) {
   }
 
   ngOnInit(): void {
@@ -87,7 +94,7 @@ export class TableSelectorComponent implements OnInit, ControlValueAccessor {
   // Control value accessor implements end.
 
   // 打开弹框
-  openModal(): void {
+  openTransferModal(): void {
     this.modal.visible = true;
     this.getTableList();
   }
@@ -105,6 +112,18 @@ export class TableSelectorComponent implements OnInit, ControlValueAccessor {
   // 关闭弹框
   closeModal(): void {
     this.modal.visible = false;
+  }
+
+  openEditModal(): void {
+    this.editTableModal.tableNames = this.value.join('\n')
+    this.modalService.create({
+      nzTitle: '编辑',
+      nzContent: this.editTablesTpl,
+      nzOnOk: () => {
+        this.value = this.editTableModal.tableNames.split('\n');
+        this.screwOnOk.emit(this.value);
+      }
+    })
   }
 
 

@@ -6,6 +6,9 @@ import {NzModalModule} from "ng-zorro-antd/modal";
 import {NzTransferModule} from "ng-zorro-antd/transfer";
 import {NzTableModule} from "ng-zorro-antd/table";
 import {NzToolTipModule} from "ng-zorro-antd/tooltip";
+import {NzInputModule} from "ng-zorro-antd/input";
+import {NzDividerModule} from "ng-zorro-antd/divider";
+import {FormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -20,6 +23,9 @@ import {NzToolTipModule} from "ng-zorro-antd/tooltip";
     NzTransferModule,
     NzTableModule,
     NzToolTipModule,
+    NzInputModule,
+    NzDividerModule,
+    FormsModule,
   ]
 })
 export class TableSelectorModule {

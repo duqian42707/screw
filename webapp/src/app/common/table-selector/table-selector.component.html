@@ -1,5 +1,7 @@
 <div>
-  <button nz-button type="button" [disabled]="!datasourceId" (click)="openModal()">选择</button>
+  <button nz-button type="button" [disabled]="!datasourceId" (click)="openTransferModal()">选择</button>
+  <nz-divider nzType="vertical"></nz-divider>
+  <button nz-button type="button" [disabled]="!datasourceId" (click)="openEditModal()">编辑</button>
   <span style="margin-left: 5px">已选：{{ selectedCount }}</span>
 </div>
 <nz-modal [nzTitle]="'选择表'" [nzWidth]="'1050px'" [nzOkLoading]="loading"
@@ -51,3 +53,7 @@
     </nz-transfer>
   </ng-container>
 </nz-modal>
+
+<ng-template #editTablesTpl>
+  <textarea nz-input rows="10" [(ngModel)]="editTableModal.tableNames"></textarea>
+</ng-template>
