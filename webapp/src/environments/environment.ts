@@ -1,4 +1,4 @@
 export const environment = {
-  apiPrefix: '/screw',
+  apiPrefix: '.',
   production: false,
 };
