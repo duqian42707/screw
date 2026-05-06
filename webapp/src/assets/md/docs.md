@@ -37,7 +37,12 @@
 
 ### 3.6. 点击生成按钮
 
-## 4. 相关资料
+## 4. 常见问题
+
+- Q: MySQL无法导出表的注释？
+- A: jdbcUrl中需要添加`useInformationSchema=true`参数
+
+## 5. 相关资料
 
 - [项目源码](https://github.com/duqian42707/screw)
 - [Poi-tl v1.10.x](https://deepoove.com/poi-tl/1.10.x/)
